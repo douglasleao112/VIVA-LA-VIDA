@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#350a3c" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta
+      name="description"
+      content="Calculadora de preços e lucro para serviços de Gel Tips do Gel Express PRO."
+    />
+    <title>Calculadora de Preços e Lucro | Gel Express PRO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/gelexpress/" aria-label="Gel Express, voltar à página principal">
+        <img src="../assets/logo-gel-express.png" alt="" width="1983" height="793" />
+        <span>Gel Express</span>
+      </a>
+      <span class="pro-badge">Material PRO</span>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Calculadora de preços e lucro</p>
+          <h1>Descobre quanto cobrar pelos teus serviços</h1>
+          <p>
+            Introduz os teus custos e objetivos. A calculadora mostra um preço mínimo de referência,
+            a margem por atendimento e quantas clientes precisas para alcançar a tua meta.
+          </p>
+        </div>
+        <div class="hero-pill" aria-label="Cálculo em três etapas">
+          <span>Custos</span><span>Preço</span><span>Meta</span>
+        </div>
+      </section>
+
+      <section class="calculator" aria-labelledby="calculator-title">
+        <form class="input-panel" id="calculator-form">
+          <div class="panel-heading">
+            <span>01</span>
+            <div>
+              <p class="eyebrow">Os teus números</p>
+              <h2 id="calculator-title">Preenche os campos</h2>
+            </div>
+          </div>
+
+          <div class="field-grid">
+            <label>
+              <span>Preço que pretendes cobrar</span>
+              <span class="money-field"><b>€</b><input id="price" name="price" type="number" min="0" step="0.01" value="50" inputmode="decimal" /></span>
+            </label>
+            <label>
+              <span>Custo de materiais por cliente</span>
+              <span class="money-field"><b>€</b><input id="materials" name="materials" type="number" min="0" step="0.01" value="8" inputmode="decimal" /></span>
+            </label>
+            <label>
+              <span>Duração média do serviço</span>
+              <span class="suffix-field"><input id="hours" name="hours" type="number" min="0.25" step="0.25" value="2" inputmode="decimal" /><b>horas</b></span>
+            </label>
+            <label>
+              <span>Valor desejado por hora</span>
+              <span class="money-field"><b>€</b><input id="hourly" name="hourly" type="number" min="0" step="0.01" value="15" inputmode="decimal" /></span>
+            </label>
+            <label>
+              <span>Despesas fixas mensais</span>
+              <span class="money-field"><b>€</b><input id="fixed" name="fixed" type="number" min="0" step="0.01" value="150" inputmode="decimal" /></span>
+            </label>
+            <label>
+              <span>Clientes previstas por mês</span>
+              <span class="suffix-field"><input id="clients" name="clients" type="number" min="1" step="1" value="20" inputmode="numeric" /><b>clientes</b></span>
+            </label>
+            <label class="wide-field">
+              <span>Meta de faturação</span>
+              <span class="money-field"><b>€</b><input id="goal" name="goal" type="number" min="0" step="10" value="1000" inputmode="decimal" /></span>
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button class="button button-primary" type="submit">Calcular agora</button>
+            <button class="button button-ghost" id="reset-button" type="button">Repor valores</button>
+          </div>
+        </form>
+
+        <section class="results-panel" aria-live="polite" aria-labelledby="results-title">
+          <div class="panel-heading light">
+            <span>02</span>
+            <div>
+              <p class="eyebrow">O teu cenário</p>
+              <h2 id="results-title">Resultado estimado</h2>
+            </div>
+          </div>
+
+          <article class="featured-result">
+            <p>Preço mínimo recomendado</p>
+            <strong id="recommended-price">45,50 €</strong>
+            <small>Materiais + tempo + quota das despesas fixas</small>
+          </article>
+
+          <div class="result-grid">
+            <article>
+              <span>Faturação mensal</span>
+              <strong id="monthly-revenue">1.000,00 €</strong>
+            </article>
+            <article>
+              <span>Lucro estimado</span>
+              <strong id="monthly-profit">690,00 €</strong>
+            </article>
+            <article>
+              <span>Margem por serviço</span>
+              <strong id="profit-service">34,50 €</strong>
+            </article>
+            <article>
+              <span>Clientes para a meta</span>
+              <strong id="clients-goal">20</strong>
+            </article>
+          </div>
+
+          <div class="status-card" id="status-card">
+            <span class="status-dot" aria-hidden="true"></span>
+            <p id="status-message">O preço atual cobre a referência mínima calculada.</p>
+          </div>
+
+          <button class="button button-light" id="copy-button" type="button">Copiar resumo</button>
+          <p class="copy-feedback" id="copy-feedback" role="status"></p>
+        </section>
+      </section>
+
+      <section class="explanation">
+        <div>
+          <p class="eyebrow">Como interpretar</p>
+          <h2>Usa o resultado como referência, não como regra fixa</h2>
+        </div>
+        <div class="explanation-grid">
+          <article>
+            <b>Preço recomendado</b>
+            <p>Soma materiais, valor do teu tempo e a parte das despesas fixas atribuída a cada cliente.</p>
+          </article>
+          <article>
+            <b>Lucro estimado</b>
+            <p>Faturação menos materiais e despesas fixas. Não inclui impostos, taxas ou imprevistos.</p>
+          </article>
+          <article>
+            <b>Clientes para a meta</b>
+            <p>Divide a meta de faturação pelo preço escolhido e arredonda para a cliente seguinte.</p>
+          </article>
+        </div>
+      </section>
+
+      <aside class="notice">
+        <b>Nota importante</b>
+        <p>
+          Os cálculos são estimativas para planeamento. Confirma os teus custos reais, inclui impostos
+          e taxas aplicáveis à tua atividade e ajusta o preço à tua experiência e ao mercado local.
+        </p>
+      </aside>
+    </main>
+
+    <footer>
+      <p>Gel Express PRO - Calculadora de Preços e Lucro</p>
+      <a href="/gelexpress/">Voltar à formação</a>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
