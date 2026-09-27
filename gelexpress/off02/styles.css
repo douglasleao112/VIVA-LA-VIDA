@@ -274,8 +274,25 @@ a {
 }
 
 .hero-vsl-gate strong { font-size: 0.96rem; }
-.hero-vsl-gate span { font-size: 1.9rem; }
 .hero-vsl-gate small { font-size: 0.72rem; }
+
+.hero-vsl-play-icon {
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 14px solid transparent;
+  border-bottom: 14px solid transparent;
+  border-left: 22px solid currentColor;
+  filter: drop-shadow(0 2px 3px rgba(29, 3, 38, 0.32));
+}
+
+.hero-vsl-play-icon-small {
+  display: inline-block;
+  margin-right: 7px;
+  border-top-width: 5px;
+  border-bottom-width: 5px;
+  border-left-width: 8px;
+}
 
 .hero-vsl-overlay {
   position: absolute;
@@ -291,6 +308,9 @@ a {
 }
 
 .hero-vsl-overlay button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px 13px;
   color: var(--white);
   background: linear-gradient(135deg, var(--purple-700), var(--pink-600));
