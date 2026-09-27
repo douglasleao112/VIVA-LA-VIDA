@@ -1219,6 +1219,15 @@ summary:focus-visible,
   transform: translateY(-10px);
 }
 
+.pro-offer-mockup {
+  display: block;
+  width: 116%;
+  max-width: none;
+  height: auto;
+  margin: 12px -8% 18px;
+  filter: drop-shadow(0 18px 20px rgba(46, 11, 53, 0.2));
+}
+
 .recommended-label {
   position: absolute;
   top: -16px;
@@ -1869,6 +1878,7 @@ body.modal-open {
   .course-stats span { font-size: 0.62rem; }
   .mobile-cta div { display: none; }
   .mobile-cta .btn { width: 100%; }
+  .pro-offer-mockup { width: 112%; margin: 8px -6% 14px; }
   .upgrade-modal-card { padding: 36px 22px 24px; border-radius: 22px; }
   .upgrade-modal-actions .btn { padding: 14px 16px; font-size: 0.86rem; }
 }
