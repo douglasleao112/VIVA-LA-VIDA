@@ -4,17 +4,27 @@
   <meta charset="utf-8">
 
   <script>
-    const pagina01 = "https://vivalavidas.com/gelexpress/off01/";
-    const pagina02 = "https://vivalavidas.com/gelexpress/off02/";
+    const paginas = {
+      off01: "https://vivalavidas.com/gelexpress/off01/",
+      off02: "https://vivalavidas.com/gelexpress/off02/",
+    };
+    const storageKey = "gel-express-ab-variant";
+    let variante;
 
-    // Split aleatório 50% / 50%
-    const destino = Math.random() < 0.5 ? pagina01 : pagina02;
+    try {
+      variante = window.localStorage.getItem(storageKey);
+      if (!paginas[variante]) {
+        variante = Math.random() < 0.5 ? "off01" : "off02";
+        window.localStorage.setItem(storageKey, variante);
+      }
+    } catch {
+      variante = Math.random() < 0.5 ? "off01" : "off02";
+    }
 
-    // Mantém UTMs e demais parâmetros
-    const parametros = window.location.search;
-
-    // Redireciona imediatamente
-    window.location.replace(destino + parametros);
+    const destino = new URL(paginas[variante]);
+    destino.search = window.location.search;
+    destino.hash = window.location.hash;
+    window.location.replace(destino.toString());
   </script>
 </head>
 

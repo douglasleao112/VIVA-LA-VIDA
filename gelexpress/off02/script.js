@@ -3,6 +3,31 @@ const checkoutUrls = {
   pro: "https://pay.hotmart.com/H107776419T?off=j4vtryhy&checkoutMode=10",
 };
 
+const attributionParams = new Set([
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_id",
+  "utm_term",
+  "utm_content",
+  "src",
+  "sck",
+  "fbclid",
+]);
+
+function buildCheckoutUrl(baseUrl) {
+  const checkoutUrl = new URL(baseUrl);
+  const landingParams = new URLSearchParams(window.location.search);
+
+  landingParams.forEach((value, key) => {
+    if (attributionParams.has(key) || key.startsWith("utm_")) {
+      checkoutUrl.searchParams.set(key, value);
+    }
+  });
+
+  return checkoutUrl.toString();
+}
+
 const toast = document.querySelector(".toast");
 let toastTimer;
 
@@ -19,17 +44,19 @@ function showToast(message) {
 }
 
 document.querySelectorAll(".checkout-link").forEach((link) => {
-  link.addEventListener("click", (event) => {
-    const plan = link.dataset.plan;
-    const url = checkoutUrls[plan];
+  const plan = link.dataset.plan;
+  const baseUrl = checkoutUrls[plan];
 
-    if (!url) {
+  if (baseUrl) link.href = buildCheckoutUrl(baseUrl);
+
+  link.addEventListener("click", (event) => {
+    if (!baseUrl) {
       event.preventDefault();
       showToast("O link deste checkout ainda precisa de ser configurado no ficheiro script.js.");
       return;
     }
 
-    link.href = url;
+    link.href = buildCheckoutUrl(baseUrl);
   });
 });
 
