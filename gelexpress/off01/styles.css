@@ -1219,6 +1219,15 @@ summary:focus-visible,
   transform: translateY(-10px);
 }
 
+.base-offer-mockup {
+  display: block;
+  width: 50%;
+  max-width: 210px;
+  height: auto;
+  margin: 4px auto 16px;
+  filter: drop-shadow(0 16px 17px rgba(46, 11, 53, 0.18));
+}
+
 .pro-offer-mockup {
   display: block;
   width: 116%;
