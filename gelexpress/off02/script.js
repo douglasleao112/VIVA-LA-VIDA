@@ -9,6 +9,147 @@ const essentialUpgradeModal = document.querySelector("#essential-upgrade-modal")
 const essentialUpgradeClose = essentialUpgradeModal?.querySelector(".upgrade-modal-close");
 let lastUpgradeTrigger = null;
 
+const heroVsl = document.querySelector(".hero-vsl");
+const heroVslSlot = document.querySelector(".hero-vsl-slot");
+const heroVslVideo = document.querySelector("#hero-vsl-video");
+
+if (heroVsl && heroVslSlot && heroVslVideo) {
+  const gate = heroVsl.querySelector(".hero-vsl-gate");
+  const overlay = heroVsl.querySelector(".hero-vsl-overlay");
+  const controls = heroVsl.querySelector(".hero-vsl-controls");
+  const progress = heroVsl.querySelector(".hero-vsl-progress");
+  const speedButton = heroVsl.querySelector('[data-vsl-action="speed"]');
+  const speeds = [1, 1.2, 1.5];
+  let heroVslStarted = false;
+  let ignoreHeroVslClickUntil = 0;
+
+  const syncHeroVsl = () => {
+    const playing = !heroVslVideo.paused && !heroVslVideo.loop;
+    heroVsl.dataset.state = heroVslVideo.ended
+      ? "ended"
+      : playing
+        ? "playing"
+        : heroVslVideo.loop
+          ? "ready"
+          : "paused";
+    gate.hidden = !heroVslVideo.loop;
+    overlay.hidden = heroVslVideo.loop || playing || heroVslVideo.ended;
+    controls.hidden = !playing;
+  };
+
+  const startHeroVsl = (restart = false, audible = true) => {
+    if (restart) heroVslVideo.currentTime = 0;
+    heroVslStarted = true;
+    heroVslVideo.loop = false;
+    heroVslVideo.defaultMuted = !audible;
+    heroVslVideo.muted = !audible;
+    if (audible) heroVslVideo.removeAttribute("muted");
+    else heroVslVideo.setAttribute("muted", "");
+    gate.hidden = true;
+    overlay.hidden = true;
+    controls.hidden = false;
+    heroVsl.dataset.state = "playing";
+    void heroVslVideo.play().catch(() => {
+      controls.hidden = true;
+      overlay.hidden = false;
+    });
+  };
+
+  const enableHeroVslSound = () => {
+    if (!heroVslStarted || !heroVslVideo.muted) return;
+    heroVslVideo.defaultMuted = false;
+    heroVslVideo.muted = false;
+    heroVslVideo.removeAttribute("muted");
+    void heroVslVideo.play().catch(() => {
+      heroVslVideo.muted = true;
+      heroVslVideo.setAttribute("muted", "");
+    });
+  };
+
+  const startHeroVslOnFirstGesture = (audible = true) => {
+    if (heroVslStarted) return;
+    // Evita que o clique sintético gerado depois de um toque reinicie o vídeo.
+    ignoreHeroVslClickUntil = performance.now() + 700;
+    startHeroVsl(true, audible);
+  };
+
+  gate.addEventListener("click", () => startHeroVsl(true));
+  heroVsl.addEventListener("click", (event) => {
+    if (performance.now() < ignoreHeroVslClickUntil) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
+  }, true);
+  heroVsl.querySelector('[data-vsl-action="resume"]').addEventListener("click", () => startHeroVsl(false));
+  heroVsl.querySelector('[data-vsl-action="restart"]').addEventListener("click", () => startHeroVsl(true));
+  speedButton.addEventListener("click", () => {
+    const currentIndex = speeds.findIndex(
+      (speed) => Math.abs(speed - heroVslVideo.playbackRate) < 0.01,
+    );
+    const nextIndex = (currentIndex + 1) % speeds.length;
+    heroVslVideo.playbackRate = speeds[nextIndex];
+    speedButton.textContent = `${heroVslVideo.playbackRate.toFixed(1)}x`;
+  });
+
+  heroVslVideo.addEventListener("play", syncHeroVsl);
+  heroVslVideo.addEventListener("pause", syncHeroVsl);
+  heroVslVideo.addEventListener("ended", () => {
+    progress.querySelector("i").style.width = "100%";
+    progress.setAttribute("aria-valuenow", "100");
+    syncHeroVsl();
+  });
+  heroVslVideo.addEventListener("timeupdate", () => {
+    if (heroVslVideo.loop || !Number.isFinite(heroVslVideo.duration) || !heroVslVideo.duration) return;
+    const percent = Math.min(100, Math.round((heroVslVideo.currentTime / heroVslVideo.duration) * 100));
+    progress.querySelector("i").style.width = `${percent}%`;
+    progress.setAttribute("aria-valuenow", String(percent));
+  });
+  heroVslVideo.addEventListener("click", () => {
+    if (!heroVslVideo.loop && heroVslVideo.muted) {
+      enableHeroVslSound();
+    }
+  });
+
+  document.addEventListener("pointerdown", (event) => {
+    if (event.pointerType === "mouse" && event.button === 0) startHeroVslOnFirstGesture();
+  }, { capture: true, passive: true });
+  document.addEventListener("pointerup", (event) => {
+    if (event.pointerType === "pen" && event.isPrimary) startHeroVslOnFirstGesture();
+  }, { capture: true, passive: true });
+  document.addEventListener("touchstart", (event) => {
+    // Começa mesmo quando o toque se transforma num arrasto para rolar a página.
+    if (event.touches.length) startHeroVslOnFirstGesture(false);
+  }, { capture: true, passive: true });
+  document.addEventListener("touchend", (event) => {
+    // Ao soltar o dedo, tenta ativar o som dentro do gesto autorizado pelo navegador.
+    if (event.changedTouches.length) enableHeroVslSound();
+  }, { capture: true, passive: true });
+  document.addEventListener("click", (event) => {
+    if (event.target.closest('[data-vsl-action="speed"], [data-vsl-action="restart"]')) return;
+    // Também cobre cliques disparados pelo teclado e navegadores sem Pointer Events.
+    if (!heroVslStarted) startHeroVsl(true);
+    else if (heroVslVideo.muted) enableHeroVslSound();
+  });
+
+  if ("IntersectionObserver" in window) {
+    const heroVslObserver = new IntersectionObserver(() => {
+      heroVsl.classList.toggle(
+        "is-floating",
+        heroVslSlot.getBoundingClientRect().bottom < 0 && !heroVslVideo.loop && !heroVslVideo.ended,
+      );
+    });
+    heroVslObserver.observe(heroVslSlot);
+  }
+
+  heroVslVideo.loop = true;
+  heroVslVideo.defaultMuted = true;
+  heroVslVideo.muted = true;
+  heroVslVideo.setAttribute("muted", "");
+  heroVslVideo.setAttribute("playsinline", "");
+  void heroVslVideo.play().catch(() => {});
+  syncHeroVsl();
+}
+
 function checkoutUrlWithTracking(url) {
   const checkoutUrl = new URL(url);
   const currentParams = new URLSearchParams(window.location.search);

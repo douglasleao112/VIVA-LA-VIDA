@@ -15,7 +15,7 @@
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=base-mockup-1" />
+    <link rel="stylesheet" href="styles.css?v=hero-vsl-7" />
 
     <!-- Meta Pixel Code -->
     <script>
@@ -92,9 +92,46 @@
           <div class="hero-copy reveal">
             <p class="eyebrow">Formação online para iniciantes em Portugal</p>
             <h1>
-              Aprende Gel Tips do zero e segue um plano para
-              <span>faturar os teus primeiros 1.000 €</span> em até 21 dias
+              Do zero aos primeiros
+              <span>1.000 € com Gel Tips</span> em 21 dias
             </h1>
+            <div class="hero-vsl-slot">
+              <div class="hero-vsl" data-state="ready" role="group" aria-label="Apresentação em vídeo">
+                <video
+                  id="hero-vsl-video"
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  webkit-playsinline
+                  preload="auto"
+                  disablepictureinpicture
+                  src="assets/video/mini-vsl-gel-express.mp4"
+                  aria-label="Apresentação do Gel Express"
+                ></video>
+                <button class="hero-vsl-gate" type="button">
+                  <strong>O teu vídeo está pronto</strong>
+                  <span aria-hidden="true">▶</span>
+                  <small>Toque para escutar</small>
+                </button>
+                <div class="hero-vsl-overlay" hidden>
+                  <strong>Continua a ver o vídeo.</strong>
+                  <button type="button" data-vsl-action="resume">▶ Continuar a ver</button>
+                  <button type="button" data-vsl-action="restart">↻ Ver desde o início</button>
+                </div>
+                <div class="hero-vsl-controls" hidden>
+                  <button type="button" data-vsl-action="speed" aria-label="Alterar velocidade do vídeo">1.0x</button>
+                </div>
+                <div
+                  class="hero-vsl-progress"
+                  role="progressbar"
+                  aria-label="Progresso do vídeo"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  aria-valuenow="0"
+                ><i></i></div>
+              </div>
+            </div>
             <p class="hero-lead">
               Aprende a base da técnica, cria o teu portefólio e executa um plano prático para
               procurar cerca de 20 clientes a 50 € por serviço — mesmo que nunca tenhas trabalhado
@@ -837,6 +874,6 @@
 
     <div class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
 
-    <script src="script.js?v=oferta-especial-1"></script>
+    <script src="script.js?v=hero-vsl-7"></script>
   </body>
 </html>

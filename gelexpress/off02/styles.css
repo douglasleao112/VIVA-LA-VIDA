@@ -208,6 +208,145 @@ a {
   -webkit-text-fill-color: transparent;
 }
 
+.hero-vsl-slot {
+  width: 100%;
+  max-width: 690px;
+  aspect-ratio: 16 / 9;
+  margin: 28px 0 0;
+}
+
+.hero-vsl {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: var(--white);
+  background: #17091d;
+  border: 1px solid rgba(220, 76, 158, 0.62);
+  border-radius: 20px;
+  box-shadow: 0 22px 50px rgba(52, 10, 62, 0.26);
+}
+
+.hero-vsl [hidden] { display: none !important; }
+
+.hero-vsl video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #080711;
+}
+
+.hero-vsl button {
+  font: 700 0.78rem "DM Sans", sans-serif;
+  cursor: pointer;
+}
+
+.hero-vsl-gate {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  width: min(250px, 80%);
+  height: 118px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+  margin: auto;
+  color: var(--white);
+  background: linear-gradient(135deg, var(--purple-700), var(--pink-600));
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 16px;
+  box-shadow: 0 14px 34px rgba(29, 3, 38, 0.48);
+  transform-origin: center;
+  animation: hero-vsl-gate-pulse 3.4s ease-in-out infinite;
+}
+
+@keyframes hero-vsl-gate-pulse {
+  0%, 100% {
+    transform: scale(0.98);
+    box-shadow: 0 12px 30px rgba(29, 3, 38, 0.42);
+  }
+  50% {
+    transform: scale(1.035);
+    box-shadow: 0 18px 42px rgba(117, 24, 133, 0.48);
+  }
+}
+
+.hero-vsl-gate strong { font-size: 0.96rem; }
+.hero-vsl-gate span { font-size: 1.9rem; }
+.hero-vsl-gate small { font-size: 0.72rem; }
+
+.hero-vsl-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  background: rgba(34, 8, 42, 0.94);
+  text-align: center;
+}
+
+.hero-vsl-overlay button {
+  padding: 8px 13px;
+  color: var(--white);
+  background: linear-gradient(135deg, var(--purple-700), var(--pink-600));
+  border: 1px solid rgba(255, 255, 255, 0.46);
+  border-radius: 9px;
+}
+
+.hero-vsl-overlay button + button { background: transparent; }
+
+.hero-vsl-controls {
+  position: absolute;
+  right: 10px;
+  bottom: 13px;
+  display: flex;
+  align-items: center;
+}
+
+.hero-vsl-controls button {
+  padding: 5px 8px;
+  color: var(--white);
+  background: rgba(43, 9, 52, 0.78);
+  border: 1px solid rgba(255, 220, 239, 0.55);
+  border-radius: 8px;
+}
+
+.hero-vsl-progress {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.hero-vsl-progress i {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--purple-600), var(--pink-500));
+  transition: width 150ms linear;
+}
+
+.hero-vsl.is-floating {
+  position: fixed;
+  z-index: 1000;
+  right: 14px;
+  bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  width: min(260px, 45vw);
+  height: auto;
+  aspect-ratio: 16 / 9;
+  box-shadow: 0 14px 38px rgba(25, 3, 31, 0.56);
+}
+
+.hero-vsl.is-floating .hero-vsl-controls { bottom: 7px; }
+.hero-vsl.is-floating .hero-vsl-overlay strong { display: none; }
+
 .hero-lead {
   max-width: 690px;
   margin: 26px 0 0;
@@ -1767,6 +1906,9 @@ body.modal-open {
   transform: translateY(0);
 }
 
+/* Evita que o transform da animação prenda o mini-player ao bloco do hero. */
+.hero-copy.reveal.visible { transform: none; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
@@ -1775,6 +1917,7 @@ body.modal-open {
   .members-preview img { animation: none; }
   .hero-method-badge,
   .floating-note { animation: none; }
+  .hero-vsl-gate { animation: none; }
 }
 
 @media (max-width: 980px) {
@@ -1786,6 +1929,7 @@ body.modal-open {
 
   .hero-grid { gap: 36px; }
   .hero-copy { text-align: center; }
+  .hero-vsl-slot { margin-inline: auto; }
   .hero-lead { margin-inline: auto; }
   .micro-benefits { justify-content: center; }
   .hero-visual { min-height: 590px; }
@@ -1808,6 +1952,13 @@ body.modal-open {
   .hero { padding: 64px 0 76px; }
   .hero::after { display: none; }
   .hero h1 { font-size: clamp(2.45rem, 12vw, 4rem); }
+  .hero-vsl-slot { margin-top: 22px; }
+  .hero-vsl { border-radius: 15px; }
+  .hero-vsl.is-floating {
+    bottom: calc(112px + env(safe-area-inset-bottom, 0px));
+    width: min(180px, 48vw);
+  }
+  .hero-vsl.is-floating .hero-vsl-controls button { padding: 2px 5px; }
   .hero-visual { min-height: 500px; }
   .hero-image-stage { inset: -8px 0 -18px; }
   .hero-image-halo { width: min(430px, 92%); }
