@@ -1,32 +1,44 @@
 const checkoutUrls = {
   essencial: "https://pay.hotmart.com/H107776419T?off=f6r8ti5i&checkoutMode=10",
   pro: "https://pay.hotmart.com/H107776419T?off=j4vtryhy&checkoutMode=10",
+  "pro-discount": "https://pay.hotmart.com/H107776419T?off=asmp9nue&checkoutMode=10",
+  "essencial-direto": "https://pay.hotmart.com/H107776419T?off=f6r8ti5i&checkoutMode=10",
 };
 
-const attributionParams = new Set([
-  "utm_source",
-  "utm_medium",
-  "utm_campaign",
-  "utm_id",
-  "utm_term",
-  "utm_content",
-  "src",
-  "sck",
-  "fbclid",
-]);
+const essentialUpgradeModal = document.querySelector("#essential-upgrade-modal");
+const essentialUpgradeClose = essentialUpgradeModal?.querySelector(".upgrade-modal-close");
+let lastUpgradeTrigger = null;
 
-function buildCheckoutUrl(baseUrl) {
-  const checkoutUrl = new URL(baseUrl);
-  const landingParams = new URLSearchParams(window.location.search);
+function checkoutUrlWithTracking(url) {
+  const checkoutUrl = new URL(url);
+  const currentParams = new URLSearchParams(window.location.search);
+  const allowedTrackingParam = /^(utm_[a-z0-9_]+|fbclid|src|sck)$/i;
 
-  landingParams.forEach((value, key) => {
-    if (attributionParams.has(key) || key.startsWith("utm_")) {
+  currentParams.forEach((value, key) => {
+    if (allowedTrackingParam.test(key) && !checkoutUrl.searchParams.has(key)) {
       checkoutUrl.searchParams.set(key, value);
     }
   });
 
   return checkoutUrl.toString();
 }
+
+function closeEssentialUpgrade() {
+  if (!essentialUpgradeModal?.open) return;
+  essentialUpgradeModal.close();
+  document.body.classList.remove("modal-open");
+  lastUpgradeTrigger?.focus();
+}
+
+essentialUpgradeClose?.addEventListener("click", closeEssentialUpgrade);
+
+essentialUpgradeModal?.addEventListener("click", (event) => {
+  if (event.target === essentialUpgradeModal) closeEssentialUpgrade();
+});
+
+essentialUpgradeModal?.addEventListener("close", () => {
+  document.body.classList.remove("modal-open");
+});
 
 const toast = document.querySelector(".toast");
 let toastTimer;
@@ -45,18 +57,27 @@ function showToast(message) {
 
 document.querySelectorAll(".checkout-link").forEach((link) => {
   const plan = link.dataset.plan;
-  const baseUrl = checkoutUrls[plan];
-
-  if (baseUrl) link.href = buildCheckoutUrl(baseUrl);
+  const configuredUrl = checkoutUrls[plan];
+  if (configuredUrl) link.href = checkoutUrlWithTracking(configuredUrl);
 
   link.addEventListener("click", (event) => {
-    if (!baseUrl) {
+    const url = checkoutUrls[plan];
+
+    if (!url) {
       event.preventDefault();
       showToast("O link deste checkout ainda precisa de ser configurado no ficheiro script.js.");
       return;
     }
 
-    link.href = buildCheckoutUrl(baseUrl);
+    if (plan === "essencial" && essentialUpgradeModal) {
+      event.preventDefault();
+      lastUpgradeTrigger = link;
+      essentialUpgradeModal.showModal();
+      document.body.classList.add("modal-open");
+      return;
+    }
+
+    link.href = checkoutUrlWithTracking(url);
   });
 });
 

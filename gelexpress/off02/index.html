@@ -15,7 +15,7 @@
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=oferta-especial-1" />
 
     <!-- Meta Pixel Code -->
     <script>
@@ -324,6 +324,10 @@
             </article>
           </div>
 
+          <div class="center-cta reveal">
+            <a class="btn btn-primary btn-large" href="#oferta">Ver os planos e preços</a>
+          </div>
+
         </div>
       </section>
 
@@ -389,7 +393,7 @@
                 aria-hidden="true"
               />
               <span class="stack-tag">Formação principal</span>
-              <h3>Gel Express Essencial</h3>
+              <h3>Gel Express Base</h3>
               <ul>
                 <li>Materiais essenciais para começar</li>
                 <li>Preparação da unha natural</li>
@@ -550,7 +554,7 @@
 
           <div class="pricing-grid">
             <article class="price-card reveal">
-              <p class="plan-name">Gel Express Essencial</p>
+              <p class="plan-name">Gel Express Base</p>
               <p class="plan-for">Para aprender e praticar a técnica</p>
               <p class="price-anchor">De <del>17,90 €</del> por</p>
               <div class="price"><span>€</span>9,90</div>
@@ -565,7 +569,7 @@
                 href="https://pay.hotmart.com/H107776419T?off=f6r8ti5i&amp;checkoutMode=10"
                 data-plan="essencial"
               >
-                Quero o Gel Express Essencial
+                Quero o Gel Express Base
               </a>
             </article>
 
@@ -580,7 +584,7 @@
               <div class="price"><span>€</span>19,90</div>
               <p class="price-detail">pagamento único</p>
               <ul>
-                <li>Tudo do Gel Express Essencial</li>
+                <li>Tudo do Gel Express Base</li>
                 <li>Kit Primeiras Clientes</li>
                 <li>Calculadora de Preços e Lucro</li>
                 <li>21 Dias de Conteúdo</li>
@@ -696,8 +700,8 @@
               <p>Sim. Podes acompanhar a formação pelo telemóvel e aceder ao conteúdo imediatamente após a confirmação da compra.</p>
             </details>
             <details>
-              <summary>Qual é a diferença entre Essencial e PRO?</summary>
-              <p>O Essencial concentra-se na técnica. O PRO acrescenta materiais para portefólio, preço, divulgação e procura das primeiras clientes.</p>
+              <summary>Qual é a diferença entre Base e PRO?</summary>
+              <p>O Base concentra-se na técnica. O PRO acrescenta materiais para portefólio, preço, divulgação e procura das primeiras clientes.</p>
             </details>
             <details>
               <summary>Durante quanto tempo tenho acesso?</summary>
@@ -772,19 +776,51 @@
       </div>
     </footer>
 
-    <div class="mobile-cta" aria-label="Ação rápida">
-      <div><small>Gel Express Essencial</small><strong>9,90 €</strong></div>
-      <a
-        class="btn btn-primary checkout-link"
-        href="https://pay.hotmart.com/H107776419T?off=f6r8ti5i&amp;checkoutMode=10"
-        data-plan="essencial"
-      >
-        Quero começar
-      </a>
-    </div>
+    <dialog
+      class="upgrade-modal"
+      id="essential-upgrade-modal"
+      aria-labelledby="essential-upgrade-title"
+      aria-describedby="essential-upgrade-description"
+    >
+      <div class="upgrade-modal-card">
+        <button class="upgrade-modal-close" type="button" aria-label="Fechar oferta especial">×</button>
+        <p class="section-label">Oferta especial para ti</p>
+        <h2 id="essential-upgrade-title">Queres levar o plano completo com 30% de desconto?</h2>
+        <p id="essential-upgrade-description">
+          Antes de continuares com o Base, podes aproveitar esta condição especial e levar o
+          Gel Express PRO com todos os recursos para preço, portefólio e divulgação.
+        </p>
+        <ul class="upgrade-benefits">
+          <li>Kit Primeiras Clientes</li>
+          <li>Calculadora de Preços e Lucro</li>
+          <li>21 Dias de Conteúdo</li>
+        </ul>
+        <div class="upgrade-modal-actions">
+          <a
+            class="btn btn-primary checkout-link"
+            href="https://pay.hotmart.com/H107776419T?off=asmp9nue&amp;checkoutMode=10"
+            data-plan="pro-discount"
+          >
+            Aproveitar o plano PRO com 30% de desconto
+          </a>
+          <a
+            class="btn btn-secondary checkout-link"
+            href="https://pay.hotmart.com/H107776419T?off=f6r8ti5i&amp;checkoutMode=10"
+            data-plan="essencial-direto"
+          >
+            Continuar com o Base por 9,90 €
+          </a>
+        </div>
+      </div>
+    </dialog>
+
+    <a class="mobile-cta" href="#oferta" aria-label="Ver as duas ofertas do Gel Express">
+      <div><small>Gel Express Base</small><strong>9,90 €</strong></div>
+      <span class="btn btn-primary">Quero começar</span>
+    </a>
 
     <div class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=oferta-especial-1"></script>
   </body>
 </html>
