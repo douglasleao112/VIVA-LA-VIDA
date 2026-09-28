@@ -7,51 +7,68 @@
     const paginas = {
       off01: "https://vivalavidas.com/gelexpress/off01/",
       off02: "https://vivalavidas.com/gelexpress/off02/",
-      off03: "https://pay.hotmart.com/H107776419T?off=f6r8ti5i&checkoutMode=10"
+      off03: "https://pay.hotmart.com/H107776419T?off=f6r8ti5i&checkoutMode=10",
     };
 
-    const storageKey = "gel-express-ab-variant";
-    let variante;
+    const marcadores = {
+      off01: "pagina1",
+      off02: "pagina2",
+      off03: "pagina3",
+    };
 
-    try {
-      variante = window.localStorage.getItem(storageKey);
+    // A nova chave garante que visitantes antigos também possam entrar no teste de 3 variantes.
+    const storageKey = "gel-express-ab-assignment-v3";
+    const assignmentTtl = 30 * 24 * 60 * 60 * 1000;
+    const parametros = new URLSearchParams(window.location.search);
+    const varianteForcada = parametros.get("ab");
+    let variante = paginas[varianteForcada] ? varianteForcada : null;
 
-      if (!paginas[variante]) {
-        const sorteio = Math.random();
-
-        if (sorteio < 1 / 3) {
-          variante = "off01";
-        } else if (sorteio < 2 / 3) {
-          variante = "off02";
-        } else {
-          variante = "off03";
-        }
-
-        window.localStorage.setItem(storageKey, variante);
+    function sortearVariante() {
+      if (window.crypto && window.crypto.getRandomValues) {
+        const numero = new Uint32Array(1);
+        window.crypto.getRandomValues(numero);
+        return ["off01", "off02", "off03"][numero[0] % 3];
       }
-    } catch {
-      const sorteio = Math.random();
 
-      if (sorteio < 1 / 3) {
-        variante = "off01";
-      } else if (sorteio < 2 / 3) {
-        variante = "off02";
-      } else {
-        variante = "off03";
+      const sorteio = Math.random();
+      if (sorteio < 1 / 3) return "off01";
+      if (sorteio < 2 / 3) return "off02";
+      return "off03";
+    }
+
+    if (!variante) {
+      try {
+        const assignment = JSON.parse(window.localStorage.getItem(storageKey));
+        const assignmentValido =
+          assignment &&
+          paginas[assignment.variant] &&
+          Date.now() - assignment.assignedAt < assignmentTtl;
+
+        if (assignmentValido) {
+          variante = assignment.variant;
+        } else {
+          variante = sortearVariante();
+          window.localStorage.setItem(storageKey, JSON.stringify({
+            variant: variante,
+            assignedAt: Date.now(),
+          }));
+        }
+      } catch {
+        variante = sortearVariante();
       }
     }
 
+    // O parâmetro "ab" serve apenas para testar uma variante específica.
+    parametros.delete("ab");
+
+    // Preserva a identificação do anúncio e acrescenta a página que recebeu a visita.
+    const sckEntrada = parametros.get("sck");
+    const marcadorPagina = marcadores[variante];
+    parametros.set("sck", sckEntrada ? `${marcadorPagina}--${sckEntrada}` : marcadorPagina);
+    parametros.set("ab_variant", variante);
+
     const destino = new URL(paginas[variante]);
-
-    // Pega UTMs e demais parâmetros recebidos na página atual
-    const parametrosEntrada = new URLSearchParams(window.location.search);
-
-    // Adiciona os parâmetros sem apagar os parâmetros originais da Hotmart
-    parametrosEntrada.forEach((valor, chave) => {
-      destino.searchParams.set(chave, valor);
-    });
-
-    // Mantém hash, caso exista
+    parametros.forEach((valor, chave) => destino.searchParams.set(chave, valor));
     destino.hash = window.location.hash;
 
     window.location.replace(destino.toString());

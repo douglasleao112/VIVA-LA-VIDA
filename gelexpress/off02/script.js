@@ -153,7 +153,7 @@ if (heroVsl && heroVslSlot && heroVslVideo) {
 function checkoutUrlWithTracking(url) {
   const checkoutUrl = new URL(url);
   const currentParams = new URLSearchParams(window.location.search);
-  const allowedTrackingParam = /^(utm_[a-z0-9_]+|fbclid|src|sck)$/i;
+  const allowedTrackingParam = /^(utm_[a-z0-9_]+|fbclid|src|sck|ab_variant)$/i;
 
   currentParams.forEach((value, key) => {
     if (allowedTrackingParam.test(key) && !checkoutUrl.searchParams.has(key)) {
